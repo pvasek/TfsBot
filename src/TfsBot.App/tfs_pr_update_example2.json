@@ -1,0 +1,115 @@
+﻿{
+  "subscriptionId": "4ee5dc6b-d8f4-4bce-91d7-1870d0e0352f",
+  "notificationId": 15,
+  "id": "377ffd72-24cc-49f2-bfb6-e81efa051fe0",
+  "eventType": "git.pullrequest.updated",
+  "publisherId": "tfs",
+  "scope": "all",
+  "message": {
+    "text": "Pavel Vasek approved pull request 4 (Updated README.md) in Test Project 2\r\nhttps://st-software-test.visualstudio.com/_git/Test%20Project%202/",
+    "html": "Pavel Vasek approved <a href=\"https://st-software-test.visualstudio.com/_git/Test%20Project%202/pullrequest/4#view=discussion\">pull request 4</a> (Updated README.md) in <a href=\"https://st-software-test.visualstudio.com/_git/Test%20Project%202/\">Test Project 2</a>",
+    "markdown": "Pavel Vasek approved [pull request 4](https://st-software-test.visualstudio.com/_git/Test%20Project%202/pullrequest/4#view=discussion) (Updated README.md) in [Test Project 2](https://st-software-test.visualstudio.com/_git/Test%20Project%202/)"
+  },
+  "detailedMessage": {
+    "text": "Pavel Vasek approved pull request 4 (Updated README.md) in Test Project 2\r\nhttps://st-software-test.visualstudio.com/_git/Test%20Project%202/\r\n - Updated README.md\r\n",
+    "html": "Pavel Vasek approved <a href=\"https://st-software-test.visualstudio.com/_git/Test%20Project%202/pullrequest/4#view=discussion\">pull request 4</a> (Updated README.md) in <a href=\"https://st-software-test.visualstudio.com/_git/Test%20Project%202/\">Test Project 2</a><p> - Updated README.md</p>",
+    "markdown": "Pavel Vasek approved [pull request 4](https://st-software-test.visualstudio.com/_git/Test%20Project%202/pullrequest/4#view=discussion) (Updated README.md) in [Test Project 2](https://st-software-test.visualstudio.com/_git/Test%20Project%202/)\r\n - Updated README.md\r\n"
+  },
+  "resource": {
+    "repository": {
+      "id": "068b4a32-b717-453b-acde-454de955ed2b",
+      "name": "Test Project 2",
+      "url": "https://st-software-test.visualstudio.com/_apis/git/repositories/068b4a32-b717-453b-acde-454de955ed2b",
+      "project": {
+        "id": "50f5486c-1306-4d46-a7ab-4c8cdfb7f143",
+        "name": "Test Project 2",
+        "url": "https://st-software-test.visualstudio.com/_apis/projects/50f5486c-1306-4d46-a7ab-4c8cdfb7f143",
+        "state": "wellFormed",
+        "revision": 515324828
+      },
+      "remoteUrl": "https://st-software-test.visualstudio.com/DefaultCollection/_git/Test%20Project%202"
+    },
+    "pullRequestId": 4,
+    "codeReviewId": 4,
+    "status": "active",
+    "createdBy": {
+      "id": "2cbec4dd-0779-4fe1-bd9a-a61aa6810124",
+      "displayName": "Pavel Vasek",
+      "uniqueName": "pvasek@gmail.com",
+      "url": "https://st-software-test.vssps.visualstudio.com/_apis/Identities/2cbec4dd-0779-4fe1-bd9a-a61aa6810124",
+      "imageUrl": "https://st-software-test.visualstudio.com/_api/_common/identityImage?id=2cbec4dd-0779-4fe1-bd9a-a61aa6810124"
+    },
+    "creationDate": "2016-08-13T06:54:03.5758587Z",
+    "title": "Updated README.md",
+    "description": " - Updated README.md",
+    "sourceRefName": "refs/heads/test_branch",
+    "targetRefName": "refs/heads/master",
+    "mergeStatus": "succeeded",
+    "mergeId": "4178fc41-588b-4bab-9492-1b9bc0b0eabb",
+    "lastMergeSourceCommit": {
+      "commitId": "7c257460357da2f4379006caf916dacd8ea78bef",
+      "url": "https://st-software-test.visualstudio.com/_apis/git/repositories/068b4a32-b717-453b-acde-454de955ed2b/commits/7c257460357da2f4379006caf916dacd8ea78bef"
+    },
+    "lastMergeTargetCommit": {
+      "commitId": "c478308c14da833510aa90314e1556bf6963d46e",
+      "url": "https://st-software-test.visualstudio.com/_apis/git/repositories/068b4a32-b717-453b-acde-454de955ed2b/commits/c478308c14da833510aa90314e1556bf6963d46e"
+    },
+    "lastMergeCommit": {
+      "commitId": "9d036c345f54354cf2e3f944053fd5126fd6d815",
+      "author": {
+        "name": "Pavel Vasek",
+        "email": "pvasek@gmail.com",
+        "date": "2016-08-13T09:46:46Z"
+      },
+      "committer": {
+        "name": "Pavel Vasek",
+        "email": "pvasek@gmail.com",
+        "date": "2016-08-13T09:46:46Z"
+      },
+      "comment": "Merge pull request 4 from test_branch into master",
+      "url": "https://st-software-test.visualstudio.com/_apis/git/repositories/068b4a32-b717-453b-acde-454de955ed2b/commits/9d036c345f54354cf2e3f944053fd5126fd6d815"
+    },
+    "reviewers": [
+      {
+        "reviewerUrl": "https://st-software-test.visualstudio.com/_apis/git/repositories/068b4a32-b717-453b-acde-454de955ed2b/pullRequests/4/reviewers/2cbec4dd-0779-4fe1-bd9a-a61aa6810124",
+        "vote": 10,
+        "votedFor": [
+          {
+            "reviewerUrl": "https://st-software-test.visualstudio.com/_apis/git/repositories/068b4a32-b717-453b-acde-454de955ed2b/pullRequests/4/reviewers/a72ec00a-d35a-4fc3-971d-ea4689c72bbe",
+            "vote": 0,
+            "id": "a72ec00a-d35a-4fc3-971d-ea4689c72bbe",
+            "displayName": "[Test Project 2]\\Test Project 2 Team",
+            "uniqueName": "vstfs:///Classification/TeamProject/50f5486c-1306-4d46-a7ab-4c8cdfb7f143\\Test Project 2 Team",
+            "url": "https://st-software-test.vssps.visualstudio.com/_apis/Identities/a72ec00a-d35a-4fc3-971d-ea4689c72bbe",
+            "imageUrl": "https://st-software-test.visualstudio.com/_api/_common/identityImage?id=a72ec00a-d35a-4fc3-971d-ea4689c72bbe",
+            "isContainer": true
+          }
+        ],
+        "id": "2cbec4dd-0779-4fe1-bd9a-a61aa6810124",
+        "displayName": "Pavel Vasek",
+        "uniqueName": "pvasek@gmail.com",
+        "url": "https://st-software-test.vssps.visualstudio.com/_apis/Identities/2cbec4dd-0779-4fe1-bd9a-a61aa6810124",
+        "imageUrl": "https://st-software-test.visualstudio.com/_api/_common/identityImage?id=2cbec4dd-0779-4fe1-bd9a-a61aa6810124"
+      },
+      {
+        "reviewerUrl": "https://st-software-test.visualstudio.com/_apis/git/repositories/068b4a32-b717-453b-acde-454de955ed2b/pullRequests/4/reviewers/a72ec00a-d35a-4fc3-971d-ea4689c72bbe",
+        "vote": 10,
+        "id": "a72ec00a-d35a-4fc3-971d-ea4689c72bbe",
+        "displayName": "[Test Project 2]\\Test Project 2 Team",
+        "uniqueName": "vstfs:///Classification/TeamProject/50f5486c-1306-4d46-a7ab-4c8cdfb7f143\\Test Project 2 Team",
+        "url": "https://st-software-test.vssps.visualstudio.com/_apis/Identities/a72ec00a-d35a-4fc3-971d-ea4689c72bbe",
+        "imageUrl": "https://st-software-test.visualstudio.com/_api/_common/identityImage?id=a72ec00a-d35a-4fc3-971d-ea4689c72bbe",
+        "isContainer": true
+      }
+    ],
+    "url": "https://st-software-test.visualstudio.com/_apis/git/repositories/068b4a32-b717-453b-acde-454de955ed2b/pullRequests/4",
+    "newDiscussionFormat": true
+  },
+  "resourceVersion": "1.0-preview.1",
+  "resourceContainers": {
+    "collection": { "id": "e1644a14-f5db-4228-9c04-8eb10908f57b" },
+    "account": { "id": "3f679beb-e0f8-42d8-9585-ce3039d0988a" },
+    "project": { "id": "50f5486c-1306-4d46-a7ab-4c8cdfb7f143" }
+  },
+  "createdDate": "2016-08-13T21:10:36.8076794Z"
+}
