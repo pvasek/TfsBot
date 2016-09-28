@@ -1,6 +1,8 @@
 ﻿using System.Web.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Web.Http.ExceptionHandling;
+using TfsBot.Infrastructure;
 
 namespace TfsBot
 {
@@ -18,6 +20,7 @@ namespace TfsBot
                 Formatting = Newtonsoft.Json.Formatting.Indented,
                 NullValueHandling = NullValueHandling.Ignore,
             };
+            config.Services.Add(typeof(IExceptionLogger), new AppInsightsExceptionLogger());
 
             // Web API configuration and services
 
