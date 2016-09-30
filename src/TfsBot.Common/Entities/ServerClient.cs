@@ -20,5 +20,7 @@ namespace TfsBot.Common.Entities
         public string BotServiceUrl { get; set; }        
         public string BotId { get; set; }
         public string BotName { get; set; }
+        public string ReplaceFrom { get; set; }
+        public string ReplaceTo { get; set; }
     }
 }

@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.ApplicationInsights;
@@ -10,29 +11,30 @@ using TfsBot.Common.Bot;
 
 namespace TfsBot.Controllers
 {
-    public class TfsCallbackController : ApiController
+    [RoutePrefix("api/webhooks")]
+    public class WebhooksController : ApiController
     {
         [HttpPost]
-        [Route("pullrequest")]
+        [Route("pullrequest/{id}")]
         public async Task<HttpResponseMessage> PullRequest(string id, [FromBody] PullRequest req)
         {
-            TrackEvent(id, req.EventType);
+            TrackEvent("pullrequest", id, req.EventType);
             var message = GetPullRequestMessage(req);
             await SendMessageIfDefined(id, message);
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
         [HttpPost]
-        [Route("build")]
+        [Route("build/{id}")]
         public async Task<HttpResponseMessage> Build(string id, [FromBody] BuildRequest req)
         {
-            TrackEvent(id, req.EventType);
+            TrackEvent("build", id, req.EventType);
             var message = GetBuildMessage(req);
             await SendMessageIfDefined(id, message);
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        private void TrackEvent(string id, string eventType)
+        private static void TrackEvent(string webhookType, string id, string eventType)
         {
             var telemetry = new TelemetryClient();
             var trackParams = new Dictionary<string, string>
@@ -42,12 +44,12 @@ namespace TfsBot.Controllers
                 //{"content", contentString}
             };
 
-            telemetry.TrackEvent("TfsCallback.Post", trackParams);
+            telemetry.TrackEvent($"webhooks.{webhookType}", trackParams);
         }
 
-        private async Task SendMessageIfDefined(string id, string message)
-        { 
-            if (message == null)
+        private static async Task SendMessageIfDefined(string id, IEnumerable<string> messages)
+        {
+            if (!messages.Any())
             {
                 return;
             }
@@ -56,35 +58,24 @@ namespace TfsBot.Controllers
             var clients = repository.GetServerClients(id);
             foreach (var client in clients)
             {
-                await BotHelper.SendMessageToClient(client, message);
+                await BotHelper.SendMessageToClient(client, string.Join(Environment.NewLine + Environment.NewLine, messages));
             }            
         }
                
-        private string GetPullRequestMessage(PullRequest req)
+        private static IEnumerable<string> GetPullRequestMessage(PullRequest req)
         {
             var prId = req.Resource.PullRequestId;
+            yield return $"**PR{prId}** {req.Message.Markdown} ([link]({req.Resource.Repository.RemoteUrl}/pullrequest/{prId}?view=files))";
             if (req.EventType == "git.pullrequest.created")
             {
-                var msg = new StringBuilder($"**PR{prId}** [Please review PR{prId}]({req.Resource.Repository.RemoteUrl}/pullrequest/{prId}?view=files)");
-                msg.AppendLine();
-                msg.AppendLine();
-                msg.AppendLine(req.Resource.Title);
-                msg.AppendLine();
-                msg.AppendLine($"_{req.Resource.CreatedBy.DisplayName}_");
-                return msg.ToString();
+                yield return $"_**{req.Resource.Title}**_";
+                yield return $"_{req.Resource.Description}_";
             }
-
-            if (req.EventType == "git.pullrequest.updated")
-            {
-                return $"**PR{prId}** - {req.Message.Markdown}";
-            }
-
-            return null;
         }
 
-        private string GetBuildMessage(BuildRequest req)
+        private static IEnumerable<string> GetBuildMessage(BuildRequest req)
         {
-            return $"**Build [{req.Resource.BuildNumber}]({req.Resource.Url})** - {req.Resource.Status} ({req.Resource.LastChangedBy.DisplayName})";
+            yield return $"**BUILD {req.Resource.BuildNumber}** {req.Message.Markdown} ([link]({req.Resource.Url}))";
         }
     }
 }

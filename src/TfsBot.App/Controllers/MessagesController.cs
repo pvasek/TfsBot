@@ -4,35 +4,40 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using Microsoft.ApplicationInsights;
 using Microsoft.Bot.Connector;
+using TfsBot.Common.Bot;
 using TfsBot.Common.Db;
 using TfsBot.Common.Entities;
 
 namespace TfsBot.Controllers
 {
     [BotAuthentication]
+    [Route("api/messages")]
     public class MessagesController : ApiController
     {
         private const string SetServerCmd = "setserver:";
         private const string GetServerCmd = "getserver";
-        private const string HelpCmd = "gethelp";
+        private const string HelpCmd = "help";
         private const string GetUsersCmd = "getusers";
 
         /// <summary>
         /// POST: api/Messages
         /// Receive a message from a user and reply to it
         /// </summary>
+        [HttpPost]
         public async Task<HttpResponseMessage> Post([FromBody]Activity activity)
         {
             var response = Request.CreateResponse(HttpStatusCode.OK);
             if (activity.Type == ActivityTypes.Message)
             {
                 var messageText = activity.RemoveRecipientMention().Trim();
+                TrackMessage(messageText);
                 if (messageText.StartsWith(SetServerCmd))
                 {
-                    var serverId = messageText.Substring(SetServerCmd.Length);
-                    await SetServerIdAsync(activity, serverId);
-                    await SendReplyAsync(activity, $"Your server id was set to '{serverId}'");
+                    var serverParams = ServerParams.Parse(messageText.Substring(SetServerCmd.Length));
+                    await SetServerIdAsync(activity, serverParams);
+                    await SendReplyAsync(activity, $"Your server id was set to '{serverParams}'");
                     return response;
                 }
 
@@ -42,11 +47,13 @@ namespace TfsBot.Controllers
                     await SendReplyAsync(activity, $"Your server id is: '{serverId}'");
                     return response;
                 }
+
                 if (messageText == HelpCmd)
                 {
-                    await SendReplyAsync(activity, $"You can setup your server id by writing _setserver:<server id>_ or getting the server id by writing _getserver_");
+                    await SendReplyAsync(activity, $"You can setup your server id by writing _setserver:[server id]_ or getting the server id by writing _getserver_");
                     return response;
                 }
+
                 if (messageText == GetUsersCmd)
                 {
                     var conversation = activity.Conversation;
@@ -54,14 +61,11 @@ namespace TfsBot.Controllers
                     return response;
                 }
 
-                if (messageText == "card1")
+                if (messageText.Contains("version"))
                 {
-                    await Card(activity);
+                    messageText = "1.2";
                 }
-                else
-                {
-                    await SendReplyAsync(activity, messageText);
-                }
+                await SendReplyAsync(activity, messageText);
             }
             else
             {
@@ -71,26 +75,39 @@ namespace TfsBot.Controllers
             return response;
         }
 
-        private async Task<string> GetServerIdAsync(Activity activity)
+        private static void TrackMessage(string message)
+        {
+            var telemetry = new TelemetryClient();
+            var trackParams = new Dictionary<string, string>
+            {
+                {"message", message},
+                //{"content", contentString}
+            };
+
+            telemetry.TrackEvent("Messages.Post", trackParams);
+        }
+
+        private static async Task<string> GetServerIdAsync(Activity activity)
         {
             var repository = new Repository();
             var client = await repository.GetClientAsync(activity.Conversation.Id, activity.Conversation.Name);
             return client.ServerId;
         }
 
-        private async Task SetServerIdAsync(Activity activity, string serverId)
+        private static async Task SetServerIdAsync(Activity activity, ServerParams serverParams)
         {
-            var repository = new Repository();
-            
-            var serverClient = new ServerClient(serverId, activity.Conversation.Id)
+            var repository = new Repository();          
+            var serverClient = new ServerClient(serverParams.Id, activity.Conversation.Id)
             {
                 UserName = activity.Conversation.Name,
                 BotServiceUrl = activity.ServiceUrl,
                 BotId = activity.Recipient.Id,
                 BotName = activity.Recipient.Name,
+                ReplaceFrom = serverParams.ReplaceFrom,
+                ReplaceTo = serverParams.ReplaceTo,
             };
             await repository.SaveServiceClient(serverClient);
-            var client = new Client(serverId, activity.Conversation.Id, activity.Conversation.Name);
+            var client = new Client(serverParams.Id, activity.Conversation.Id, activity.Conversation.Name);
             await repository.SaveClient(client);
         }
 
@@ -101,35 +118,7 @@ namespace TfsBot.Controllers
             await connector.Conversations.ReplyToActivityAsync(reply);
         }
 
-        private async Task Card(Activity activity)
-        {
-            var connector = new ConnectorClient(new Uri(activity.ServiceUrl));
-            var replyToConversation = activity.CreateReply("Please review:");
-            replyToConversation.Recipient = activity.From;
-            replyToConversation.Type = "message";
-            replyToConversation.Attachments = new List<Attachment>();
-            var cardImages = new List<CardImage>();
-            cardImages.Add(new CardImage(url: "https://<ImageUrl1>"));
-            var cardButtons = new List<CardAction>();
-            var plButton = new CardAction()
-            {
-                Value = "https://tfs.sportresult.com/tfs/FIBA/FIBA%20MAP/_git/MAP/pullrequest/276?view=discussion",
-                Type = "openUrl",
-                Title = "Open"
-            };
-            cardButtons.Add(plButton);
-            var plCard = new ThumbnailCard()
-            {
-                Title = "PR277",
-                Subtitle = "integration tests for #1378 #1390",
-                //Images = cardImages,
-                Buttons = cardButtons
-            };
-            var plAttachment = plCard.ToAttachment();
-            replyToConversation.Attachments.Add(plAttachment);
-            await connector.Conversations.SendToConversationAsync(replyToConversation);
-        }
-
+      
         private async Task<Activity> HandleSystemMessageAsync(Activity message)
         {
             if (message.Type == ActivityTypes.DeleteUserData)

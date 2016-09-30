@@ -176,7 +176,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
-    <Compile Include="Controllers\TfsCallbackController.cs" />
+    <Compile Include="Controllers\WebhooksController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -193,12 +193,8 @@
     <Content Include="Service References\Application Insights\ConnectedService.json" />
     <Content Include="tfs_pr_update_example2.json" />
     <Content Include="tfs_build_failed.json" />
-    <None Include="web.Debug.config">
-      <DependentUpon>web.config</DependentUpon>
-    </None>
-    <None Include="web.Release.config">
-      <DependentUpon>web.config</DependentUpon>
-    </None>
+    <None Include="Properties\PublishProfiles\tfsbot-test.pubxml" />
+    <None Include="Properties\PublishProfiles\tfsbottest - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TfsBot.Common\TfsBot.Common.csproj">
