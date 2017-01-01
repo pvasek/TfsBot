@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.ApplicationInsights;
 using Microsoft.Bot.Connector;
-using TfsBot.Common.Bot;
 using TfsBot.Common.Db;
 using TfsBot.Common.Entities;
 
@@ -16,6 +15,12 @@ namespace TfsBot.Controllers
     [Route("api/messages")]
     public class MessagesController : ApiController
     {
+        public MessagesController(IRepository repository)
+        {
+            _repository = repository;
+        }
+
+        private readonly IRepository _repository;
         private const string SetServerCmd = "setserver:";
         private const string GetServerCmd = "getserver";
         private const string HelpCmd = "help";
@@ -87,16 +92,14 @@ namespace TfsBot.Controllers
             telemetry.TrackEvent("Messages.Post", trackParams);
         }
 
-        private static async Task<string> GetServerIdAsync(Activity activity)
+        private async Task<string> GetServerIdAsync(Activity activity)
         {
-            var repository = new Repository();
-            var client = await repository.GetClientAsync(activity.Conversation.Id, activity.Conversation.Name);
+            var client = await _repository.GetClientAsync(activity.Conversation.Id, activity.Conversation.Name);
             return client.ServerId;
         }
 
-        private static async Task SetServerIdAsync(Activity activity, ServerParams serverParams)
+        private async Task SetServerIdAsync(Activity activity, ServerParams serverParams)
         {
-            var repository = new Repository();          
             var serverClient = new ServerClient(serverParams.Id, activity.Conversation.Id)
             {
                 UserName = activity.Conversation.Name,
@@ -106,9 +109,9 @@ namespace TfsBot.Controllers
                 ReplaceFrom = serverParams.ReplaceFrom,
                 ReplaceTo = serverParams.ReplaceTo,
             };
-            await repository.SaveServiceClient(serverClient);
+            await _repository.SaveServiceClient(serverClient);
             var client = new Client(serverParams.Id, activity.Conversation.Id, activity.Conversation.Name);
-            await repository.SaveClient(client);
+            await _repository.SaveClient(client);
         }
 
         private static async Task SendReplyAsync(Activity activity, string message)
