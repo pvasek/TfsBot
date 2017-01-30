@@ -37,7 +37,8 @@ namespace TfsBot.App_Start
         private static void InitializeContainer(Container container)
         {
             container.Register<Configuration>(Lifestyle.Singleton);
-            container.Register<IRepository>(() => new Repository(container.GetInstance<Configuration>().StorageConnectionString), Lifestyle.Scoped);
+            //container.Register<IRepository>(() => new Repository(container.GetInstance<Configuration>().StorageConnectionString), Lifestyle.Scoped);
+            container.Register<IRepository, InMemoryRepository>(Lifestyle.Singleton);
         }
     }
 }

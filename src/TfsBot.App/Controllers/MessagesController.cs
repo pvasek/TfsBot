@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.ApplicationInsights;
+using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using TfsBot.Common.Db;
 using TfsBot.Common.Entities;
@@ -53,7 +55,7 @@ namespace TfsBot.Controllers
                     return response;
                 }
 
-                if (messageText == HelpCmd)
+                if (messageText == HelpCmd || messageText == "Settings")
                 {
                     await SendReplyAsync(activity, $"You can setup your server id by writing _setserver:[server id]_ or getting the server id by writing _getserver_");
                     return response;
@@ -116,37 +118,53 @@ namespace TfsBot.Controllers
 
         private static async Task SendReplyAsync(Activity activity, string message)
         {
-            var connector = new ConnectorClient(new Uri(activity.ServiceUrl));            
+            var connector = GetConnectorClient(activity);            
             var reply = activity.CreateReply(message);
             await connector.Conversations.ReplyToActivityAsync(reply);
         }
 
-      
-        private async Task<Activity> HandleSystemMessageAsync(Activity message)
+        private static ConnectorClient GetConnectorClient(Activity activity)
         {
-            if (message.Type == ActivityTypes.DeleteUserData)
+            var connector = new ConnectorClient(new Uri(activity.ServiceUrl));
+            return connector;
+        }
+
+        private async Task<Activity> HandleSystemMessageAsync(Activity activity)
+        {
+            if (activity.Type == ActivityTypes.DeleteUserData)
             {
                 // Implement user deletion here
                 // If we handle user deletion, return a real message
             }
-            else if (message.Type == ActivityTypes.ConversationUpdate)
+            else if (activity.Type == ActivityTypes.ConversationUpdate)
             {
+                if (activity.MembersAdded?.Any() == true)
+                {
+                    var client = GetConnectorClient(activity);
+                    var dialog = new PromptDialog.PromptChoice<string>(
+                        new string[] { "Settings", "Help", "Home Page"}, "Hi, I am TFS bot", "Try again", 1);
+                    
+                    await Conversation.SendAsync(activity, () => dialog);
+                   
+                    return null;
+                    //await SendReplyAsync(activity, "Hello hello");
+                }
                 // Handle conversation state changes, like members being added and removed
                 // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
                 // Not available in all channels
             }
-            else if (message.Type == ActivityTypes.ContactRelationUpdate)
+            else if (activity.Type == ActivityTypes.ContactRelationUpdate)
             {
                 // Handle add/remove from contact lists
                 // Activity.From + Activity.Action represent what happened
 
-                await SendReplyAsync(message, $"Hi I am TFS bot, set up your server by sending message _setserver:<yourserverid>_");
+                await SendReplyAsync(activity, $"Hi I am TFS bot, set up your server by sending message _setserver:<yourserverid>_");
             }
-            else if (message.Type == ActivityTypes.Typing)
+            else if (activity.Type == ActivityTypes.Typing)
             {
                 // Handle knowing tha the user is typing
             }
-            else if (message.Type == ActivityTypes.Ping)
+            else if (activity.Type == ActivityTypes.Ping)
             {
             }
 

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TfsBot.App", "src\TfsBot.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TfsBot.Common", "src\TfsBot.Common\TfsBot.Common.csproj", "{CC06BC15-F2F9-4B01-93D2-11488F4F91F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TfsApp.Tests", "TfsApp.Tests\TfsApp.Tests.csproj", "{08151C70-74CF-4896-B64D-3660A02E92FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{CC06BC15-F2F9-4B01-93D2-11488F4F91F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC06BC15-F2F9-4B01-93D2-11488F4F91F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CC06BC15-F2F9-4B01-93D2-11488F4F91F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08151C70-74CF-4896-B64D-3660A02E92FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08151C70-74CF-4896-B64D-3660A02E92FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08151C70-74CF-4896-B64D-3660A02E92FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08151C70-74CF-4896-B64D-3660A02E92FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

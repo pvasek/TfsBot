@@ -112,6 +112,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bot\BotHelper.cs" />
+    <Compile Include="Db\InMemoryRepository.cs" />
     <Compile Include="Db\IRepository.cs" />
     <Compile Include="Entities\ServerParams.cs" />
     <Compile Include="Db\Repository.cs" />

@@ -10,6 +10,6 @@ namespace TfsBot.Common.Db
         List<ServerClient> GetServerClients(string serverId);
         Task SaveClient(Client client);
         Task<Client> GetClientAsync(string userId, string userName);
-        Task RemoveServerClientAsync(ServerClient client);
+        //Task RemoveServerClientAsync(ServerClient client);
     }
 }
