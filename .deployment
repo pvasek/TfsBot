@@ -1,2 +1,2 @@
 [config]
-project = src/TfsBot.App/TfsBot.csproj
+project = src/TfsBot.Application/TfsBot.csproj
