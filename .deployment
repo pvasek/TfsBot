@@ -1,2 +1,3 @@
 [config]
-project = src/TfsBot.Application/TfsBot.csproj
+project = src/TfsBot.Application/TfsBot.Application.csproj
+command = deploy.cmd

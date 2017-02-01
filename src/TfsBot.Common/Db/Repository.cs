@@ -8,15 +8,14 @@ using TfsBot.Common.Entities;
 
 namespace TfsBot.Common.Db
 {
-    public class Repository
+    public class Repository : IRepository
     {
         private readonly CloudTable _serviceClientsTable;
         private readonly CloudTable _clientsTable;
 
-        public Repository()
+        public Repository(string storageConnectionString)
         {
-            var storageAccount = CloudStorageAccount.Parse(
-                CloudConfigurationManager.GetSetting("StorageConnectionString"));
+            var storageAccount = CloudStorageAccount.Parse(storageConnectionString);
             var tableClient = storageAccount.CreateCloudTableClient();
             _serviceClientsTable = tableClient.GetTableReference("serviceclients");
             _serviceClientsTable.CreateIfNotExists();

@@ -8,12 +8,20 @@ using System.Web.Http;
 using Microsoft.ApplicationInsights;
 using TfsBot.Common.Dtos;
 using TfsBot.Common.Bot;
+using TfsBot.Common.Db;
 
 namespace TfsBot.Controllers
 {
     [RoutePrefix("api/webhooks")]
     public class WebhooksController : ApiController
     {
+        public WebhooksController(IRepository repository)
+        {
+            _repository = repository;
+        }
+
+        private readonly IRepository _repository;
+
         [HttpPost]
         [Route("pullrequest/{id}")]
         public async Task<HttpResponseMessage> PullRequest(string id, [FromBody] PullRequest req)
@@ -47,15 +55,14 @@ namespace TfsBot.Controllers
             telemetry.TrackEvent($"webhooks.{webhookType}", trackParams);
         }
 
-        private static async Task SendMessageIfDefined(string id, IEnumerable<string> messages)
+        private async Task SendMessageIfDefined(string id, IEnumerable<string> messages)
         {
             if (!messages.Any())
             {
                 return;
             }
 
-            var repository = new Common.Db.Repository();
-            var clients = repository.GetServerClients(id);
+            var clients = _repository.GetServerClients(id);
             foreach (var client in clients)
             {
                 await BotHelper.SendMessageToClient(client, string.Join(Environment.NewLine + Environment.NewLine, messages));
