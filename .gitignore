@@ -279,3 +279,5 @@ __pycache__/
 build/
 
 web.debug.config
+
+.DS_Store/
