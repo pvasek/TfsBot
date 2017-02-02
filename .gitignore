@@ -280,4 +280,5 @@ build/
 
 web.debug.config
 
+.DS_Store
 .DS_Store/
