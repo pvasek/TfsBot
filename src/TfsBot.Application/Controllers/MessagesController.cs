@@ -140,14 +140,16 @@ namespace TfsBot.Controllers
             {
                 if (activity.MembersAdded?.Any() == true)
                 {
-                    var client = GetConnectorClient(activity);
-                    var dialog = new PromptDialog.PromptChoice<string>(
-                        new string[] { "Settings", "Help", "Home Page"}, "Hi, I am TFS bot", "Try again", 1);
+                    //var client = GetConnectorClient(activity);
+                    //var dialog = new PromptDialog.PromptChoice<string>(
+                    //    new string[] { "Settings", "Help", "Home Page"}, "Hi, I am TFS bot", "Try again", 1);
+
+                    //await Conversation.SendAsync(activity, () => dialog);
+
+                    //return null;
                     
-                    await Conversation.SendAsync(activity, () => dialog);
-                   
-                    return null;
-                    //await SendReplyAsync(activity, "Hello hello");
+                    await SendReplyAsync(activity, $"Hi I am TFS bot, set up your server by sending message _setserver:<yourserverid>_");
+                    //return null;
                 }
                 // Handle conversation state changes, like members being added and removed
                 // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info

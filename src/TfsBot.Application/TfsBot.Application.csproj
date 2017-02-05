@@ -243,6 +243,9 @@
     <Content Include="Service References\Application Insights\ConnectedService.json" />
     <None Include="Properties\PublishProfiles\tfsbot-test.pubxml" />
     <None Include="Properties\PublishProfiles\tfsbottest - Web Deploy.pubxml" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TfsBot.Common\TfsBot.Common.csproj">
