@@ -27,6 +27,7 @@ namespace TfsBot.Controllers
         private const string GetServerCmd = "getserver";
         private const string HelpCmd = "help";
         private const string GetUsersCmd = "getusers";
+        private const string WelcomeMessage = "Hi I am TFS bot, you can start setup by \"Settings\"_";
 
         /// <summary>
         /// POST: api/Messages
@@ -133,34 +134,17 @@ namespace TfsBot.Controllers
         {
             if (activity.Type == ActivityTypes.DeleteUserData)
             {
-                // Implement user deletion here
-                // If we handle user deletion, return a real message
             }
             else if (activity.Type == ActivityTypes.ConversationUpdate)
             {
                 if (activity.MembersAdded?.Any() == true)
                 {
-                    //var client = GetConnectorClient(activity);
-                    //var dialog = new PromptDialog.PromptChoice<string>(
-                    //    new string[] { "Settings", "Help", "Home Page"}, "Hi, I am TFS bot", "Try again", 1);
-
-                    //await Conversation.SendAsync(activity, () => dialog);
-
-                    //return null;
-                    
-                    await SendReplyAsync(activity, $"Hi I am TFS bot, set up your server by sending message _setserver:<yourserverid>_");
-                    //return null;
+                    await SendReplyAsync(activity, WelcomeMessage);
                 }
-                // Handle conversation state changes, like members being added and removed
-                // Use Activity.MembersAdded and Activity.MembersRemoved and Activity.Action for info
-                // Not available in all channels
             }
             else if (activity.Type == ActivityTypes.ContactRelationUpdate)
             {
-                // Handle add/remove from contact lists
-                // Activity.From + Activity.Action represent what happened
-
-                await SendReplyAsync(activity, $"Hi I am TFS bot, set up your server by sending message _setserver:<yourserverid>_");
+                await SendReplyAsync(activity, WelcomeMessage);
             }
             else if (activity.Type == ActivityTypes.Typing)
             {
