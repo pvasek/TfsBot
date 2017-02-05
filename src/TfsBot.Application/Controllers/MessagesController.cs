@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -24,10 +25,11 @@ namespace TfsBot.Controllers
 
         private readonly IRepository _repository;
         private const string SetServerCmd = "setserver:";
+        private const string SetupCmd = "setup";
         private const string GetServerCmd = "getserver";
         private const string HelpCmd = "help";
         private const string GetUsersCmd = "getusers";
-        private const string WelcomeMessage = "Hi I am TFS bot, you can start setup by \"Settings\"_";
+        private const string WelcomeMessage = "Hi I am TFS bot, you can find out more by writing \"help\"";
 
         /// <summary>
         /// POST: api/Messages
@@ -41,35 +43,50 @@ namespace TfsBot.Controllers
             {
                 var messageText = activity.RemoveRecipientMention().Trim();
                 TrackMessage(messageText);
-                if (messageText.StartsWith(SetServerCmd))
+                var messageTextLower = messageText.ToLowerInvariant();
+                if (messageTextLower == SetupCmd)
                 {
-                    var serverParams = ServerParams.Parse(messageText.Substring(SetServerCmd.Length));
+                    var serverParams = ServerParams.New();
                     await SetServerIdAsync(activity, serverParams);
                     await SendReplyAsync(activity, $"Your server id was set to '{serverParams}'");
                     return response;
                 }
+                if (messageTextLower.StartsWith(SetServerCmd))
+                {
+                    var serverParams = ServerParams.Parse(messageText.Substring(SetServerCmd.Length));
+                    if (serverParams.Id.Length == 20)
+                    {
+                        await SendReplyAsync(activity, $"This is not valid server id.");
+                    }
+                    else
+                    {
+                        await SetServerIdAsync(activity, serverParams);
+                        await SendReplyAsync(activity, $"Your server id was set to '{serverParams}'");
+                    }
+                    return response;
+                }
 
-                if (messageText == GetServerCmd)
+                if (messageTextLower == GetServerCmd)
                 {
                     var serverId = await GetServerIdAsync(activity);
                     await SendReplyAsync(activity, $"Your server id is: '{serverId}'");
                     return response;
                 }
 
-                if (messageText == HelpCmd || messageText == "Settings")
+                if (messageTextLower == HelpCmd || messageTextLower == "Settings")
                 {
-                    await SendReplyAsync(activity, $"You can setup your server id by writing _setserver:[server id]_ or getting the server id by writing _getserver_");
+                    await SendReplyAsync(activity, $"You can setup your server id by writing _setup_ or getting the server id by writing _getserver_");
                     return response;
                 }
 
-                if (messageText == GetUsersCmd)
+                if (messageTextLower == GetUsersCmd)
                 {
                     var conversation = activity.Conversation;
                     await SendReplyAsync(activity, $"Conversation id: {conversation?.Id}, name: {conversation?.Name}");
                     return response;
                 }
 
-                if (messageText.Contains("version"))
+                if (messageTextLower.Contains("version"))
                 {
                     messageText = "1.2";
                 }
@@ -137,7 +154,9 @@ namespace TfsBot.Controllers
             }
             else if (activity.Type == ActivityTypes.ConversationUpdate)
             {
-                if (activity.MembersAdded?.Any() == true)
+                if (activity.MembersAdded?.Any() == true 
+                    && (activity.MembersAdded.Count != 1 
+                        || activity.MembersAdded.All(i => i.Name.ToLowerInvariant() != "bot")))
                 {
                     await SendReplyAsync(activity, WelcomeMessage);
                 }

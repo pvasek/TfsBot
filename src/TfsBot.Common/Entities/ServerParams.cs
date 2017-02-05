@@ -1,4 +1,7 @@
-﻿namespace TfsBot.Common.Entities
+﻿using System;
+using System.Text;
+
+namespace TfsBot.Common.Entities
 {
     public class ServerParams
     {
@@ -15,6 +18,19 @@
                 ReplaceFrom = parts.Length == 3 ? parts[1] : null,
                 ReplaceTo = parts.Length == 3 ? parts[2] : null,
             };
+        }
+
+        public const string keys = "abcdefghijklmnopqrstuvwxyz0123456789";
+
+        public static ServerParams New()
+        {
+            var random = new Random(Environment.TickCount);
+            var id = new StringBuilder();
+            for (var i = 0; i < 30; i++)
+            {
+                id.Append(keys[random.Next(0, keys.Length - 1)]);
+            }
+            return new ServerParams {Id = id.ToString()};
         }
 
         public override string ToString()
