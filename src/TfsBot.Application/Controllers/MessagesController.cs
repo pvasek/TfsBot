@@ -18,18 +18,20 @@ namespace TfsBot.Controllers
     [Route("api/messages")]
     public class MessagesController : ApiController
     {
-        public MessagesController(IRepository repository)
+        public MessagesController(IRepository repository, Configuration configuration)
         {
             _repository = repository;
+            _configuration = configuration;
         }
 
         private readonly IRepository _repository;
+        private readonly Configuration _configuration;
         private const string SetServerCmd = "setserver:";
         private const string SetupCmd = "setup";
         private const string GetServerCmd = "getserver";
         private const string HelpCmd = "help";
         private const string GetUsersCmd = "getusers";
-        private const string WelcomeMessage = "Hi I am TFS bot, you can find out more by writing \"help\"";
+        private const string WelcomeMessage = "Hi I am TFS bot, you can find out more by writing **help**";
 
         /// <summary>
         /// POST: api/Messages
@@ -46,9 +48,9 @@ namespace TfsBot.Controllers
                 var messageTextLower = messageText.ToLowerInvariant();
                 if (messageTextLower == SetupCmd)
                 {
-                    var serverParams = ServerParams.New();
+                    var serverParams = ServerParams.New(_configuration.ServerIdPrefix);
                     await SetServerIdAsync(activity, serverParams);
-                    await SendReplyAsync(activity, $"Your server id was set to '{serverParams}'");
+                    await SendReplyAsync(activity, GetServerIdInfo(serverParams.Id, _configuration));
                     return response;
                 }
                 if (messageTextLower.StartsWith(SetServerCmd))
@@ -61,7 +63,7 @@ namespace TfsBot.Controllers
                     else
                     {
                         await SetServerIdAsync(activity, serverParams);
-                        await SendReplyAsync(activity, $"Your server id was set to '{serverParams}'");
+                        await SendReplyAsync(activity, GetServerIdInfo(serverParams.Id, _configuration));
                     }
                     return response;
                 }
@@ -69,13 +71,13 @@ namespace TfsBot.Controllers
                 if (messageTextLower == GetServerCmd)
                 {
                     var serverId = await GetServerIdAsync(activity);
-                    await SendReplyAsync(activity, $"Your server id is: '{serverId}'");
+                    await SendReplyAsync(activity, GetServerIdInfo(serverId, _configuration));
                     return response;
                 }
 
                 if (messageTextLower == HelpCmd || messageTextLower == "Settings")
                 {
-                    await SendReplyAsync(activity, $"You can setup your server id by writing _setup_ or getting the server id by writing _getserver_");
+                    await SendReplyAsync(activity, $"You can setup your server id by writing **setup** or getting the server id by writing **getserver**");
                     return response;
                 }
 
@@ -100,6 +102,22 @@ namespace TfsBot.Controllers
             return response;
         }
 
+        private static string GetServerIdInfo(string serverId, Configuration configuration)
+        {
+            if (serverId == null)
+            {
+                return "You need to run **setup** first.";
+            }
+
+            var prUrl = $"{configuration.Url}/api/webhooks/pullrequest/{serverId}";
+            var buildUrl = $"{configuration.Url}/api/webhooks/build/{serverId}";
+
+            return $"Your server id was set to **{serverId}**  \n" +
+                   $"_Setup your TFS webhooks to following urls:_  \n" +
+                   $"pull requests:\t[{prUrl}]({prUrl})  \n" +
+                   $"build:\t\t[{buildUrl}]({buildUrl})  \n";
+        }
+
         private static void TrackMessage(string message)
         {
             var telemetry = new TelemetryClient();
@@ -115,7 +133,7 @@ namespace TfsBot.Controllers
         private async Task<string> GetServerIdAsync(Activity activity)
         {
             var client = await _repository.GetClientAsync(activity.Conversation.Id, activity.Conversation.Name);
-            return client.ServerId;
+            return client?.ServerId;
         }
 
         private async Task SetServerIdAsync(Activity activity, ServerParams serverParams)

@@ -246,6 +246,9 @@
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TfsBot.Common\TfsBot.Common.csproj">

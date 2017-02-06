@@ -278,7 +278,7 @@ __pycache__/
 ### VisualStudio Patch ###
 build/
 
-web.debug.config
+web.*.config
 
 .DS_Store
 .DS_Store/

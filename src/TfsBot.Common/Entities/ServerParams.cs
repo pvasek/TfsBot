@@ -22,10 +22,10 @@ namespace TfsBot.Common.Entities
 
         public const string keys = "abcdefghijklmnopqrstuvwxyz0123456789";
 
-        public static ServerParams New()
+        public static ServerParams New(string prefix = "")
         {
             var random = new Random(Environment.TickCount);
-            var id = new StringBuilder();
+            var id = new StringBuilder(prefix);
             for (var i = 0; i < 30; i++)
             {
                 id.Append(keys[random.Next(0, keys.Length - 1)]);

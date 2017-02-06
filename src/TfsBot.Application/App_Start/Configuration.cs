@@ -1,10 +1,18 @@
-﻿using Microsoft.Azure;
+﻿using System.Configuration;
+using Microsoft.Azure;
 
 namespace TfsBot
 {
     public class Configuration
     {
-        public string StorageConnectionString => CloudConfigurationManager.GetSetting("StorageConnectionString");
-        public string ApplicationInsightsKey => CloudConfigurationManager.GetSetting("ApplicationInsightsKey");
+        public string StorageConnectionString => Get("StorageConnectionString");
+        public string ApplicationInsightsKey => Get("ApplicationInsightsKey");
+        public string Url => Get("Url");
+        public string ServerIdPrefix => Get("ServerIdPrefix");
+
+        public string Get(string key)
+        {
+            return CloudConfigurationManager.GetSetting(key) ?? ConfigurationManager.AppSettings[key];
+        }
     }
 }
