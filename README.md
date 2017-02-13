@@ -8,7 +8,7 @@ We use it with Skype only. It was not tested with any other channel.
 
 ## How to use it
 
-Once the bot is part of your group chat you need to set it up by sending a message _@{bot_name} setserver:{your_secret}_. This will connect your chat with the given secret. This secret you need to use during setting up the webhooks in TFS.
+You can either use hosted version at [https://tfsbot.io](https://tfsbot.io) or host it yourself. After adding the bot to the check it will print you the links you need to use in TFS webhooks.
 
 In TFS settings setup webhooks for repositories/types you want to be notified about. Use the following urls:
 - for pull requests: _{bot_url}/api/webhooks/pullrequest/{your_secret}_ 
