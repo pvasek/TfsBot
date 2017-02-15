@@ -46,6 +46,13 @@ namespace TfsBot.Controllers
                 var messageText = activity.RemoveRecipientMention().Trim();
                 TrackMessage(messageText);
                 var messageTextLower = messageText.ToLowerInvariant();
+                if (messageTextLower == "chat.info")
+                {
+                    await SendReplyAsync(activity,
+                        $"conversationId: {activity.Conversation.Id}, url: {activity.ServiceUrl}");
+
+                }
+
                 if (messageTextLower == SetupCmd)
                 {
                     var serverParams = ServerParams.New(_configuration.ServerIdPrefix);

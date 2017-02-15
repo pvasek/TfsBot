@@ -63,6 +63,10 @@ namespace TfsBot.Controllers
             }
 
             var clients = _repository.GetServerClients(id);
+            if (clients.Count == 0)
+            {
+                throw new ArgumentException($"There are no clients for id: {id}");
+            }
             foreach (var client in clients)
             {
                 await BotHelper.SendMessageToClient(client, string.Join(Environment.NewLine + Environment.NewLine, messages));
