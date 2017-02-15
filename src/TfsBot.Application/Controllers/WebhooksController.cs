@@ -42,6 +42,23 @@ namespace TfsBot.Controllers
             return Request.CreateResponse(HttpStatusCode.OK);
         }
 
+        [HttpGet]
+        [HttpPost]
+        [Route("test/{id}")]
+        public async Task<HttpResponseMessage> Test(string id)
+        {
+            TrackEvent("test", id, "");
+            try
+            {
+                await SendMessageIfDefined(id, new[] {"webhooks are working"});
+                return Request.CreateResponse(HttpStatusCode.OK, new {result = "OK"});
+            }
+            catch (Exception e)
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, new { result = "FAILED", error = e.ToString() });
+            }
+        }
+
         private static void TrackEvent(string webhookType, string id, string eventType)
         {
             var telemetry = new TelemetryClient();
