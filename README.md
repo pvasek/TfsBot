@@ -1,4 +1,4 @@
-# TFS Bot 
+# TFS Skype Bot 
 
 This is a simple TFS bot based on Microsoft [Bot Framework](https://dev.botframework.com/).
 
