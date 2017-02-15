@@ -1,0 +1,42 @@
+﻿@using TfsBot
+@inherits System.Web.Mvc.WebViewPage
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TFS Bot</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="../../stylesheets/default.css">
+    @if (Configuration.Default.ApplicationInsightsKey != null)
+    {
+        <script type="text/javascript">
+  var appInsights=window.appInsights||function(config){
+    function i(config){t[config]=function(){var i=arguments;t.queue.push(function(){t[config].apply(t,i)})}}var t={config:config},u=document,e=window,o="script",s="AuthenticatedUserContext",h="start",c="stop",l="Track",a=l+"Event",v=l+"Page",y=u.createElement(o),r,f;y.src=config.url||"https://az416426.vo.msecnd.net/scripts/a/ai.0.js";u.getElementsByTagName(o)[0].parentNode.appendChild(y);try{t.cookie=u.cookie}catch(p){}for(t.queue=[],t.version="1.0",r=["Event","Exception","Metric","PageView","Trace","Dependency"];r.length;)i("track"+r.pop());return i("set"+s),i("clear"+s),i(h+a),i(c+a),i(h+v),i(c+v),i("flush"),config.disableExceptionTracking||(r="onerror",i("_"+r),f=e[r],e[r]=function(config,i,u,e,o){var s=f&&f(config,i,u,e,o);return s!==!0&&t["_"+r](config,i,u,e,o),s}),t
+    }({
+        instrumentationKey:"@Configuration.Default.ApplicationInsightsKey"
+    });
+
+    window.appInsights=appInsights;
+    appInsights.trackPageView();
+    </script>
+    }
+</head>
+<body>
+    <div class="container">
+        <h1>TFS Bot</h1>
+        <p>
+            This is TFS / Visual Studio Online skype bot that can deliver notification about your pull request or builds to your skype team chat.
+        </p>
+        <p>
+            After you add the bot to your team chat you need to do two things
+            <ol>
+                <li>Send <strong>setup</strong> message to tfs bot: <code>@@tfsbot setup</code></li>
+                <li>Go to your TFS/VS online setting project setting page / service hooks and add <strong>Web Hooks</strong> with urls which bot sent you.</li>
+            </ol>
+        </p>
+        <a href="https://join.skype.com/bot/3e10e4d3-aa2e-4965-b2d6-bfec88c8a806" target="_blank">
+            <img src="https://dev.botframework.com/Client/Images/Add-To-Skype-Buttons.png">
+        </a>
+    </div>
+</body>
+</html>

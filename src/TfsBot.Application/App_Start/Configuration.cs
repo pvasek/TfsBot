@@ -14,5 +14,7 @@ namespace TfsBot
         {
             return CloudConfigurationManager.GetSetting(key) ?? ConfigurationManager.AppSettings[key];
         }
+
+        public static Configuration Default { get; } = new Configuration();
     }
 }

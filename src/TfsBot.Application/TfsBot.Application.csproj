@@ -219,13 +219,14 @@
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="index.html" />
     <Content Include="stylesheets\default.css" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\Configuration.cs" />
+    <Compile Include="App_Start\MvcConfig.cs" />
     <Compile Include="App_Start\SimpleInjectorInitializer.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MessagesController.cs" />
     <Compile Include="Controllers\WebhooksController.cs" />
     <Compile Include="Global.asax.cs">
@@ -243,6 +244,7 @@
     <Content Include="Service References\Application Insights\ConnectedService.json" />
     <None Include="Properties\PublishProfiles\tfsbot-test.pubxml" />
     <None Include="Properties\PublishProfiles\tfsbottest - Web Deploy.pubxml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
