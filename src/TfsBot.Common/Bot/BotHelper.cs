@@ -17,6 +17,7 @@ namespace TfsBot.Common.Bot
             //       .CreateDirectConversationAsync(botAccount, userAccount).Id;
 
             // because client.UserId was set in a MessageController to activity.Conversation.Id we can use this
+            MicrosoftAppCredentials.TrustServiceUrl(client.BotServiceUrl);
             var conversationId = client.UserId; 
             var message = Activity.CreateMessageActivity();
             message.From = botAccount;
