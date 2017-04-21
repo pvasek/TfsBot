@@ -111,6 +111,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bot\ActivityExtensions.cs" />
     <Compile Include="Bot\BotHelper.cs" />
     <Compile Include="Db\InMemoryRepository.cs" />
     <Compile Include="Db\IRepository.cs" />

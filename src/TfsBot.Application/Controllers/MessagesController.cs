@@ -11,6 +11,7 @@ using Microsoft.Bot.Builder.Dialogs;
 using Microsoft.Bot.Connector;
 using TfsBot.Common.Db;
 using TfsBot.Common.Entities;
+using TfsBot.Common.Bot;
 
 namespace TfsBot.Controllers
 {
@@ -43,7 +44,8 @@ namespace TfsBot.Controllers
             var response = Request.CreateResponse(HttpStatusCode.OK);
             if (activity.Type == ActivityTypes.Message)
             {
-                var messageText = activity.RemoveRecipientMention().Trim();
+                var mentions = activity.GetMentions().FirstOrDefault(i => i.Mentioned.Id == activity.Recipient.Id);
+                var messageText = activity.RemoveFuzzyRecipientMention().Trim();
                 TrackMessage(messageText);
                 var messageTextLower = messageText.ToLowerInvariant();
                 if (messageTextLower == "chat.info")
