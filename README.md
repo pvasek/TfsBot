@@ -1,8 +1,9 @@
-# TFS Skype Bot 
 
-## UPDATE
+# UPDATE
 
 **Change your webhooks from https://tfsbot.io to https://tfsbot.com!!!***
+
+# TFS Skype Bot 
 
 This is a simple TFS bot based on Microsoft [Bot Framework](https://dev.botframework.com/).
 
