@@ -1,7 +1,8 @@
 
 # UPDATE
 
-**Change your webhooks from https://tfsbot.io to https://tfsbot.com!!!***
+**Change your webhooks from https://tfsbot.io to https://tfsbot.com!!!**
+
 
 # TFS Skype Bot 
 
