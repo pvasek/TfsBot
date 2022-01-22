@@ -1,5 +1,9 @@
 # TFS Skype Bot 
 
+## UPDATE
+
+**Change your webhooks from https://tfsbot.io to https://tfsbot.com!!!***
+
 This is a simple TFS bot based on Microsoft [Bot Framework](https://dev.botframework.com/).
 
 It uses TFS webhooks to send messages to your team chats about _pull requests_ and _builds_.
@@ -8,7 +12,7 @@ We use it with Skype only. It was not tested with any other channel.
 
 ## How to use it
 
-You can either use hosted version at [https://tfsbot.io](https://tfsbot.io) or host it yourself. After adding the bot to the check it will print you the links you need to use in TFS webhooks.
+You can either use hosted version at [https://tfsbot.com](https://tfsbot.com) or host it yourself. After adding the bot to the check it will print you the links you need to use in TFS webhooks.
 
 In TFS settings setup webhooks for repositories/types you want to be notified about. Use the following urls:
 - for pull requests: _{bot_url}/api/webhooks/pullrequest/{your_secret}_ 
